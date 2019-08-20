@@ -1,0 +1,38 @@
+# Use postgres/example user/password credentials
+
+# via docker-compose
+# docker-compose -f docker-compose.yml up
+
+# psql command (remember attach shell for run the psql command)
+# psql -h localhost -U postgres
+
+version: '3'
+
+services:
+  postgres-compose:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "15432:5432"
+    # @TODO docker volume create PostgreSQL
+    # volumes:
+    #   - C:\Users\felip\Desktop\databases\Docker-Compose\PostgreSQL:/var/lib/postgres/data
+    networks:
+      - postgres-compose-network
+      
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "felipecaggi@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "adminpassword"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-compose
+    networks:
+      - postgres-compose-network
+
+networks: 
+  postgres-compose-network:
+    driver: bridge
